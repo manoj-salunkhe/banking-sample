@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
 interface CustomerAttrs {
   name: string;
@@ -18,7 +18,7 @@ interface CustomerModel extends mongoose.Model<CustomerDoc> {
   build(attrs: CustomerAttrs): CustomerDoc;
 }
 
-const customerSchema = new Schema<CustomerDoc>({
+const customerSchema = new mongoose.Schema<CustomerDoc>({
   name: { type: String, required: true },
   email: { type: String, required: true },
   address: { type: String, required: true },
