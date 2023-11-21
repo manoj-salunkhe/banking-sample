@@ -1,6 +1,7 @@
 import express from "express";
-import { userRouter } from "./routes/signup";
+import { signupRouter } from "./routes/signup";
 
 const app = express();
-app.use(userRouter);
+app.use(express.json())
+app.use(signupRouter);
 export { app };
