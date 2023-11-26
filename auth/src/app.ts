@@ -2,6 +2,7 @@ import express from "express";
 import cookieSession from "cookie-session";
 import { signupRouter } from "./routes/signup";
 import { signinRouter } from "./routes/signin";
+import { errorHandler } from "../../common/src";
 
 const app = express();
 app.use(express.json());
@@ -16,4 +17,5 @@ app.use(
 
 app.use(signupRouter);
 app.use(signinRouter);
+app.use(errorHandler);
 export { app };
