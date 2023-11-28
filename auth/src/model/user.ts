@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Password } from "../services/password";
+import { ROLE } from "../../../common/src";
 
 interface UserAttrs {
   name: string;
@@ -7,6 +8,7 @@ interface UserAttrs {
   password: string;
   mobile: string;
   address: string;
+  role: ROLE;
 }
 
 interface UserDoc extends mongoose.Document {
@@ -15,6 +17,7 @@ interface UserDoc extends mongoose.Document {
   password: string;
   mobile: string;
   address: string;
+  role: ROLE;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -27,19 +30,20 @@ const userSchema = new mongoose.Schema<UserDoc>({
   password: { type: String, required: true },
   mobile: { type: String, required: true, min: 10, max: 10 },
   address: { type: String, required: true },
+  role: { type: String, enum: Object.values(ROLE),default:ROLE.CUSTOMER, required: true },
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
 
-userSchema.pre('save', async function (done) {
-  if (this.isModified('password')) {
-    const hash = await Password.toHash(this.get("password"))
-    this.set('password', hash)
+userSchema.pre("save", async function (done) {
+  if (this.isModified("password")) {
+    const hash = await Password.toHash(this.get("password"));
+    this.set("password", hash);
   }
-  done()
-})
+  done();
+});
 
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 

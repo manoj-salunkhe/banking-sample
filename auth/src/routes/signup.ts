@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import dotenv from "dotenv";
 import { User } from "../model/user";
-import { validateRequest, BadRequestError } from "../../../common/src";
+import { validateRequest, BadRequestError, ROLE } from "../../../common/src";
 
 dotenv.config();
 
@@ -26,10 +26,14 @@ router.post(
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage("Address must be between 4 and 20 characters"),
+    body("role")
+      .notEmpty()
+      .isIn(Object.values(ROLE))
+      .withMessage(`role must be any of following : ${Object.values(ROLE)} `),
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, mobile, address } = req.body;
+    const { name, email, password, mobile, address, role } = req.body;
 
     try {
       const existingUser = await User.findOne({ email });
@@ -44,6 +48,7 @@ router.post(
         password,
         mobile,
         address,
+        role,
       });
 
       await user.save();
