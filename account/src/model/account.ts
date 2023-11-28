@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ACCOUNT_TYPE, ROLE } from "../../common/src";
+import { ACCOUNT_TYPE, ROLE } from "../../../common/src";
 
 // MOVE THIS USERATTRS interface accordingly
 
@@ -26,6 +26,10 @@ interface AccountDoc extends mongoose.Document {
   accountType: ACCOUNT_TYPE;
 }
 
+interface AccountModel extends mongoose.Model<AccountDoc> {
+  build(attrs: AccountAttrs): AccountDoc;
+}
+
 const accountSchema = new mongoose.Schema<AccountDoc>({
   accountNumber: { type: String, required: true },
   userId: {
@@ -40,3 +44,13 @@ const accountSchema = new mongoose.Schema<AccountDoc>({
   },
 });
 
+accountSchema.statics.build = (attrs: AccountAttrs) => {
+  return new Account(attrs);
+};
+
+const Account = mongoose.model<AccountDoc, AccountModel>(
+  "Account",
+  accountSchema
+);
+
+export { Account };
