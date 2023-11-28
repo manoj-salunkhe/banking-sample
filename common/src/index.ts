@@ -6,3 +6,4 @@ export * from "./middlewares/error-handler";
 export * from "./middlewares/validate-request";
 
 export * from "./types/role";
+export * from "./types/account-types"
