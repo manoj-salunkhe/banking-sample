@@ -1,6 +1,8 @@
 import express from "express";
-import { connectToDB } from "./db-connection";
+import { createRouter } from "./routes/create";
 
 const app = express();
+
+app.use(createRouter);
 
 export { app };
